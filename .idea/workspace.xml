@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0c944128-b81d-4c8b-a52e-e9d5ac9693fa" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -95,7 +94,14 @@
       <option name="project" value="LOCAL" />
       <updated>1574166456643</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Modified README.md.">
+      <created>1574166624216</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1574166624216</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -113,6 +119,7 @@
     <MESSAGE value="Add README.md and setup.py to test if the git works." />
     <MESSAGE value="Add project files of PyCharm." />
     <MESSAGE value="Add branch dev." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add branch dev." />
+    <MESSAGE value="Modified README.md." />
+    <option name="LAST_COMMIT_MESSAGE" value="Modified README.md." />
   </component>
 </project>

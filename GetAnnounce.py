@@ -38,11 +38,26 @@ class GetAnnounce:
         html = requests.get(self.__domain+self.__direct+self.__list).text
         self.l.notice("获取成功！")
         data = etree.HTML(html)
-        for i in range(1,30):
+        for i in range(1,31):
             title = data.xpath('//*[@id="itemContainer"]/div[%d]/a[1]/text()' % i)
             time = data.xpath('//*[@id="itemContainer"]/div[%d]/span/text()' % i)
             href = data.xpath('//*[@id="itemContainer"]/div[%d]/a[1]/@href' % i)
+            author = data.xpath('//*[@id="itemContainer"]/div[%d]/a[2]/text()' % i)
             self.l.info("获取到《%s》通知" % title[0])
+            self.__cacheList.append({"title":title[0],"time":time[0],"href":self.__domain+href[0],"author":author[0]})
+
+
+        '''
+        #TODO
+        对时间进行排序
+        什么的，得到一个排序后的列表，然后根据列表进行内容抓取，放到__cacheContent里面，就可以了。
+        '''
+        for i in self.__cacheList:
+            self.l.info("正在获取《%s》..." % i['title'])
+            html = requests.get(self.__domain + self.__direct + i['href']).text
+            self.l.notice("获取成功！")
+            content = data.xpath('/html/body/div[3]/div[1]/div[2]/div[2]/div/div[3]/div/div[3]/p[25]/span/span//text()')
+            print(content)
 
 
 

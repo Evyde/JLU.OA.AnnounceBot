@@ -18,11 +18,12 @@ class Logger(object):
 
     def error(self,text):
         self.__write("[ERROR] " + text)
-
+        return
 
     def notice(self,text):
         self.__write("[NOTICE] " + text)
-
+        return
 
     def info(self,text):
         self.__write("[INFO] " + text)
+        return

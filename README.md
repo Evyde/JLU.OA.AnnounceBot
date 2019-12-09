@@ -6,13 +6,30 @@
 ---
 ## 项目功能
 1. 实现校内通知的自动获取
-2. 将通知内容及标题通过ServerChan推送至微信
-3. 对于附件，则使用上传某临时空间做外链（该功能可暂时不做）
+2. 将通知内容及标题通过ServerChan推送至微信或SMTP发送至邮箱或本地输出。
+3. 对于附件，则附上链接
+
 
 ## 使用原理与技术
 1. 爬虫
 2. HTTP GET POST
 3. 文本处理
+
+  
+## 使用的第三方库
+1. lxml
+2. requests
+  
+  
+## 使用的Python自带库
+1. time
+2. datetime
+3. operator
+4. functools
+5. email
+6. urllib
+7. smtplib
+
 
 ## 结构
 1.  Class `GetAnnounce`负责获取通知内容
@@ -60,7 +77,7 @@
 7.  Class `Logger`负责生成日志。
    
     该类中，有三大消息类型，分别是Error、Notice、Info。    
-    1. `Logger.__init__()`，未来会实现对文件/数据库的写入。
+    1. `Logger.__init__()`，初始化，可扩展。
     2. `Logger.error(text)`，向日志中写入一条内容为text的Error类型消息。
     3. `Logger.notice(text)`，向日志中写入一条内容为text的Notice类型消息。
     4. `Logger.info(text)`，向日志中写入一条内容为text的Info类型消息。

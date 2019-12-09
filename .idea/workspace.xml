@@ -27,16 +27,15 @@
               </list>
             </value>
           </entry>
-          <entry type="REMOTE">
-            <value>
-              <list>
-                <branch-info repo="$PROJECT_DIR$" source="origin/dev" />
-              </list>
-            </value>
-          </entry>
         </map>
       </branch-storage>
     </favorite-branches>
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--tags" />
+        <option name="title" value="All" />
+      </GitPushTagMode>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>

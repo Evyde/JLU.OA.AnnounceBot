@@ -22,7 +22,7 @@ class ProcessText:
         tmp += "**  作者： **" + self.__cache['author'] + "**\n  \n  ---  \n  \n"
         tmp += self.__cache['content']
         tmp += "\n  ---  \n  "
-        if 'attach' in self.__cache:
+        if self.__cache['attach']:
             for i in self.__cache['attach']:
                 tmp += "### 附件：" + "[%s]" % i
                 tmp += "(%s)\n  \n" % self.__cache['attach'].get(i)
@@ -35,14 +35,17 @@ class ProcessText:
         self.__result['title'] = self.__cache['title']
         tmp = self.__result['title'] + "\n"
         tmp += "日期：" + self.__cache['time']
-        tmp += "作者：" + self.__cache['author'] + "**\n"
+        tmp += "作者：" + self.__cache['author'] + "\n"
+        tmp += 50 * '-'
+        tmp += "\n"
         tmp += self.__cache['content']
         tmp += "\n"
-        if 'attach' in self.__cache:
+        tmp += 50 * '-'
+        if self.__cache['attach']:
             for i in self.__cache['attach']:
                 tmp += "附件：" + "%s:" % i
                 tmp += "%s\n" % self.__cache['attach'].get(i)
         else:
-            tmp += "该通知没有附件。"
+            tmp += "该通知没有附件！"
         self.__result['content'] = tmp
         return self.__result

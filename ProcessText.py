@@ -7,7 +7,7 @@ class ProcessText:
 
     def getSimpleText(self):
         self.__result['title'] = self.__cache['title']
-        self.__result['content'] = str(self.__cache['content'])[0:50]
+        self.__result['content'] = str(self.__cache['content'])[0:100]
         return self.__result
 
     def getNormalText(self):
@@ -17,16 +17,17 @@ class ProcessText:
 
     def getFullTextMD(self):
         self.__result['title'] = self.__cache['title']
-        tmp = "# " + self.__result['title'] + "\n  \n"
-        tmp += "## 日期： **" + self.__cache['time']
+        tmp = "## " + self.__result['title'] + "\n  \n"
+        tmp += "### 日期： **" + self.__cache['time']
         tmp += "**  作者： **" + self.__cache['author'] + "**\n  \n  ---  \n  \n"
         tmp += self.__cache['content']
         tmp += "\n  ---  \n  "
         if 'attach' in self.__cache:
             for i in self.__cache['attach']:
-                for k in i:
-                    tmp += "## 附件：" + "[%s]" % k
-                    tmp += "(%s)\n  \n" % i.get(k)
+                tmp += "### 附件：" + "[%s]" % i
+                tmp += "(%s)\n  \n" % self.__cache['attach'].get(i)
+        else:
+            tmp += "### 该通知没有附件。"
         self.__result['content'] = tmp
         return self.__result
 
@@ -39,8 +40,9 @@ class ProcessText:
         tmp += "\n"
         if 'attach' in self.__cache:
             for i in self.__cache['attach']:
-                for k in i:
-                    tmp += "附件：" + "%s:" %k
-                    tmp += "%s\n" % i.get(k)
+                tmp += "附件：" + "%s:" % i
+                tmp += "%s\n" % self.__cache['attach'].get(i)
+        else:
+            tmp += "该通知没有附件。"
         self.__result['content'] = tmp
         return self.__result

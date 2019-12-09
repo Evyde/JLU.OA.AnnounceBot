@@ -1,11 +1,11 @@
 import Logger
-import requests,json
+import requests, json
 from lxml import etree
 import datetime, operator, functools
 from urllib import parse
 
 
-class GetAnnounce:
+class GetAnnounce(object):
     __domain = ""
     __direct = "defaultroot/"
     __list = "PortalInformation!jldxList.action?channelId=179577"
@@ -14,8 +14,11 @@ class GetAnnounce:
     __linkBaseUrl = "rd/download/BASEEncoderAjax.jsp"
     __downloadBaseUrl = "rd/download/attachdownload.jsp?res="
     __header = {
-        'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.87 Safari/537.36',
-                  'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'}
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.87 Safari/537.36',
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'}
+    __obj = None
+    __initFlag = False
+    __max = 2
 
     l = Logger.Logger()
 
@@ -26,22 +29,27 @@ class GetAnnounce:
         except:
             return False
 
-    def __process(self):
-        return " "
+    def __new__(cls, *args, **kwargs):
+        if cls.__obj is None:
+            cls.__obj = super().__new__(cls)
+        return cls.__obj
 
     def __init__(self, text):
-        if text == "" or text == " ":
-            self.__domain = "https://oa.jlu.edu.cn/"
-        else:
-            self.__domain = text
-        if self.__testHttp(self.__domain):
-            self.l.notice("Http连接成功！")
-            self.l.info("目标地址：" + self.__domain)
-        else:
-            self.l.error("连接错误！请检查网络连接！")
-            raise Exception("NetworkError")
+        if self.__initFlag is False:
+            if text == "" or text == " ":
+                self.__domain = "https://oa.jlu.edu.cn/"
+            else:
+                self.__domain = text
+            if self.__testHttp(self.__domain):
+                self.l.notice("Http连接成功！")
+                self.l.info("目标地址：" + self.__domain)
 
-    def __cmpDatetime(o,a,b):
+            else:
+                self.l.error("连接错误！请检查网络连接！")
+                raise Exception("NetworkError")
+        self.__initFlag = True
+
+    def __cmpDatetime(o, a, b):
         aDatetime = datetime.datetime.strptime(a['time'], '%Y年%m月%d日 %H:%M\xa0\xa0')
         bDatetime = datetime.datetime.strptime(b['time'], '%Y年%m月%d日 %H:%M\xa0\xa0')
         if aDatetime > bDatetime:
@@ -52,11 +60,13 @@ class GetAnnounce:
             return 0
 
     def createCache(self):
+        self.__cacheList = []
+        self.__cacheContent = []
         self.l.info("正在获取网页内容...")
         html = requests.get(self.__domain + self.__direct + self.__list).text
         self.l.notice("获取成功！")
         data = etree.HTML(html)
-        for i in range(1, 31):
+        for i in range(1, self.__max):
             time = data.xpath('//*[@id="itemContainer"]/div[%d]/span/text()' % i)
             href = data.xpath('//*[@id="itemContainer"]/div[%d]/a[1]/@href' % i)
             author = data.xpath('//*[@id="itemContainer"]/div[%d]/a[2]/text()' % i)
@@ -77,7 +87,8 @@ class GetAnnounce:
             for j in content:
                 if str(j.get('class')).find("content_time") != -1:
                     i['time'] = j.xpath('./text()')[0]
-                    self.l.notice("获取成功！完整时间：%s" % i['time'])
+                    self.l.notice("完整时间：%s" % i['time'])
+                    self.l.notice("链接：%s" % i['href'])
                 elif str(j.get('class')).find("content_t") != -1:
                     i['title'] = j.xpath('./text()')[0]
                     self.l.notice("获取成功！完整标题：%s" % i['title'])
@@ -88,31 +99,30 @@ class GetAnnounce:
                                 tmpResult = tmpResult + x
                         tmpResult = tmpResult + "\t\n"
                 if str(j.get('class')).find("news_aboutFile") != -1:
-                    #附件存在
-                    #获取InfomationID
+                    # 附件存在
+                    # 获取InfomationID
                     sc = str(html)
                     start = sc.find("informationId=")
-                    start = sc.find("\'",start)
-                    end = sc.find("\'",start+1)
-                    sc = sc[start+1:end]
-                    url = self.__domain+self.__direct+self.__linkBaseUrl
+                    start = sc.find("\'", start)
+                    end = sc.find("\'", start + 1)
+                    sc = sc[start + 1:end]
+                    url = self.__domain + self.__direct + self.__linkBaseUrl
                     for k in j.xpath('.//span'):
                         attSave = str(k.get('id'))
                         attName = str(k.get('title'))
                         send = parse.quote(attSave + "@" + attName + "@" + str(sc))
                         send = "res=" + send
-                        rJson = str(requests.post(url,send,headers=self.__header).text)
-                        rJson.strip()
-                        rJson.replace("\r","")
-                        rJson.replace("\n","")
-                        rJson.replace("\\r", "")
-                        rJson.replace("\\n", "")
-                        tmpAttach.update({str(k.get('title')):self.__domain+self.__direct+self.__downloadBaseUrl+str(rJson)})
+                        rJson = str(requests.post(url, send, headers=self.__header).text)
+                        link = self.__domain + self.__direct + self.__downloadBaseUrl + str(rJson)
+                        link = link.replace('\r', "")
+                        link = link.replace('\n', "")
+                        tmpAttach.update({str(k.get('title')): link})
 
-            self.__cacheContent.append({'title':i['title'],'address':i['href'],'time':i['time'],'author':i['author'],'content':tmpResult,'attach':tmpAttach})
+            self.__cacheContent.append(
+                {'title': i['title'], 'address': i['href'], 'time': i['time'], 'author': i['author'],
+                 'content': tmpResult, 'attach': tmpAttach})
             # 对时间进行排序
         self.__cacheContent.sort(key=functools.cmp_to_key(self.__cmpDatetime))
-        
 
     def freshCache(self):
         # 首先需要复制原有缓存
@@ -121,7 +131,7 @@ class GetAnnounce:
         self.createCache()
         # 批量比较不同，将不同的内容放入缓存前方
         # 首先进行快比较
-        if operator.eq(self.__cacheContent,oldCache):
+        if operator.eq(self.__cacheContent, oldCache):
             self.l.notice("缓存未更改！")
             return None
         else:
@@ -132,9 +142,10 @@ class GetAnnounce:
                     if i['title'] != j['title']:
                         newCache.append(i)
                         k += 1
-            for i in range(1,k):
+            for i in range(1, k):
+                self.l.info("第%d条已删除。" % i)
                 self.__cacheContent.pop()
-            #return newCache
+            # return newCache
             self.__cacheContent.append(newCache)
             return newCache
 

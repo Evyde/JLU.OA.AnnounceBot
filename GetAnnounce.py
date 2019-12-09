@@ -1,9 +1,6 @@
-import Logger
-import requests, json
 from lxml import etree
-import datetime, operator, functools
+import datetime, operator, functools, requests, Logger
 from urllib import parse
-
 
 class GetAnnounce(object):
     __domain = ""
@@ -18,7 +15,7 @@ class GetAnnounce(object):
         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'}
     __obj = None
     __initFlag = False
-    __max = 2
+    __max = 31
 
     l = Logger.Logger()
 

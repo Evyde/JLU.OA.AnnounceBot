@@ -1,7 +1,7 @@
-import requests, smtplib
-from urllib import parse
-from email.mime.text import MIMEText
 from email.header import Header
+from email.mime.text import MIMEText
+from urllib import parse
+import requests, smtplib
 
 
 class MessageSender(object):
@@ -74,7 +74,7 @@ class SMTPSender(object):
 
 
 class ConsoleSender(object):
-    def __init__(self,config):
+    def __init__(self, config):
         config = config
 
     def send(self, msg):

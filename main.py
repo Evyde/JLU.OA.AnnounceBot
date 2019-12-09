@@ -1,5 +1,4 @@
-import GetAnnounce, MessageSender, Logger
-import ProcessText, time
+import GetAnnounce, MessageSender, Logger, ProcessText, time
 
 def main():
     l = Logger.Logger()

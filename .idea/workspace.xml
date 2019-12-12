@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0c944128-b81d-4c8b-a52e-e9d5ac9693fa" name="Default Changelist" comment="">
+    <list default="true" id="0c944128-b81d-4c8b-a52e-e9d5ac9693fa" name="Default Changelist" comment="Update README.md">
+      <change beforePath="$PROJECT_DIR$/.idea/PythonHomework.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PythonHomework.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProcessText.py" beforeDir="false" afterPath="$PROJECT_DIR$/ProcessText.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GetAnnounce.py" beforeDir="false" afterPath="$PROJECT_DIR$/GetAnnounce.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -57,7 +59,7 @@
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$USER_HOME$/Desktop/sshiPhone" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">

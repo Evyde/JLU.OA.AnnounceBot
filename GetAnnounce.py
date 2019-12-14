@@ -186,7 +186,6 @@ class GetAnnounce(object):
             for i in range(1, k):
                 self.__cacheContent.pop()
             self.l.info("共删除%d条。" % k)
-            self.__cacheList.append(newCache)
             self.__cacheContent.append(self.getContentCache(newCache))
             self.__cacheContent = self.__cacheSort(self.__cacheContent)
             return self.__cacheContent

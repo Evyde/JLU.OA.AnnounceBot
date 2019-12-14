@@ -44,6 +44,7 @@ def main():
 
     g.createCache()
     cache = g.get()
+    print(cache)
     for i in cache:
         p = ProcessText.ProcessText(i)
         if m.getMethod() == "serverchan":
@@ -51,7 +52,7 @@ def main():
         elif m.getMethod() == "smtp":
             l.notice(m.send(p.getFullText()))
         elif m.getMethod() == "console":
-            l.notice(m.send(p.getSimpleText()))
+            l.notice(m.send(p.getFullText()))
         time.sleep(1)
     while True:
         cache = g.freshCache()
@@ -66,10 +67,8 @@ def main():
                 elif m.getMethod() == "console":
                     l.notice(m.send(p.getSimpleText()))
                 time.sleep(1)
-        # 回收资源
-        del p
         # 休息5分钟
         l.info("5分钟后重试")
-        time.sleep(300)
+        # time.sleep(300)
 
 main()

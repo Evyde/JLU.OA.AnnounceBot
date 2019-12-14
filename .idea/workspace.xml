@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="0c944128-b81d-4c8b-a52e-e9d5ac9693fa" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GetAnnounce.py" beforeDir="false" afterPath="$PROJECT_DIR$/GetAnnounce.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProcessText.py" beforeDir="false" afterPath="$PROJECT_DIR$/ProcessText.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -176,7 +174,28 @@
       <option name="project" value="LOCAL" />
       <updated>1576144856534</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="修复了缓存更新逻辑，并且修复了获取失败的问题">
+      <created>1576321507025</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1576321507025</updated>
+    </task>
+    <task id="LOCAL-00010" summary="修复了缓存更新逻辑，并且修复了获取失败的问题">
+      <created>1576321527403</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1576321527403</updated>
+    </task>
+    <task id="LOCAL-00011" summary="修复了缓存更新逻辑，并且修复了获取失败的问题">
+      <created>1576321566094</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1576321566094</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -199,6 +218,7 @@
     <MESSAGE value="Final version 1.0.1" />
     <MESSAGE value="Update README.md" />
     <MESSAGE value="test" />
-    <option name="LAST_COMMIT_MESSAGE" value="test" />
+    <MESSAGE value="修复了缓存更新逻辑，并且修复了获取失败的问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="修复了缓存更新逻辑，并且修复了获取失败的问题" />
   </component>
 </project>

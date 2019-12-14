@@ -44,7 +44,6 @@ def main():
 
     g.createCache()
     cache = g.get()
-    print(cache)
     for i in cache:
         p = ProcessText.ProcessText(i)
         if m.getMethod() == "serverchan":
@@ -69,6 +68,6 @@ def main():
                 time.sleep(1)
         # 休息5分钟
         l.info("5分钟后重试")
-        # time.sleep(300)
+        time.sleep(300)
 
 main()

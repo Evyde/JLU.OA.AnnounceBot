@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0c944128-b81d-4c8b-a52e-e9d5ac9693fa" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/PythonHomework.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PythonHomework.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="0c944128-b81d-4c8b-a52e-e9d5ac9693fa" name="Default Changelist" comment="修复了缓存列表刷新时，会重复的问题">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GetAnnounce.py" beforeDir="false" afterPath="$PROJECT_DIR$/GetAnnounce.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MessageSender.py" beforeDir="false" afterPath="$PROJECT_DIR$/MessageSender.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProcessText.py" beforeDir="false" afterPath="$PROJECT_DIR$/ProcessText.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -197,7 +197,14 @@
       <option name="project" value="LOCAL" />
       <updated>1576321566094</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="修复了缓存列表刷新时，会重复的问题">
+      <created>1576336971165</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1576336971165</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -221,6 +228,7 @@
     <MESSAGE value="Update README.md" />
     <MESSAGE value="test" />
     <MESSAGE value="修复了缓存更新逻辑，并且修复了获取失败的问题" />
-    <option name="LAST_COMMIT_MESSAGE" value="修复了缓存更新逻辑，并且修复了获取失败的问题" />
+    <MESSAGE value="修复了缓存列表刷新时，会重复的问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="修复了缓存列表刷新时，会重复的问题" />
   </component>
 </project>

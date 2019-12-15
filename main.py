@@ -5,11 +5,12 @@ def main():
     methodFlag = True
     while methodFlag:
         l.info("欢迎使用校内通知接收机器人！")
-        l.info("支持3种接收消息方法：")
+        l.info("支持4种接收消息方法：")
         l.info("1. ServerChan")
         l.info("2. SMTP邮件")
         l.info("3. 控制台")
-        l.notice("请输入接收通知方法[1,2,3]：")
+        l.info("4. iOS端的Bark应用")
+        l.notice("请输入接收通知方法[1,2,3,4]：")
         userInput = int(input())
         if userInput is 1:
             m = MessageSender.MessageSender("serverchan")
@@ -37,6 +38,13 @@ def main():
             m = MessageSender.MessageSender("console")
             m.config({})
             methodFlag = False
+        elif userInput is 4:
+            m = MessageSender.MessageSender("bark")
+            l.notice("请输入您的APIKEY：")
+            SCKEY = input()
+            m.config({'apikey': SCKEY})
+            methodFlag = False
+            # x5Pza5ihMyZCkFpW28D6KY
         else:
             l.error("输入错误！请重新输入")
 
@@ -51,7 +59,9 @@ def main():
         elif m.getMethod() == "smtp":
             l.notice(m.send(p.getFullText()))
         elif m.getMethod() == "console":
-            l.notice(m.send(p.getFullText()))
+            l.notice(m.send(p.getNormalText()))
+        elif m.getMethod() == "bark":
+            l.notice(m.send(p.getSimpleText()))
         time.sleep(1)
     while True:
         cache = g.freshCache()
@@ -64,6 +74,8 @@ def main():
                 elif m.getMethod() == "smtp":
                     l.notice(m.send(p.getFullText()))
                 elif m.getMethod() == "console":
+                    l.notice(m.send(p.getNormalText()))
+                elif m.getMethod() == "bark":
                     l.notice(m.send(p.getSimpleText()))
                 time.sleep(1)
         # 休息5分钟

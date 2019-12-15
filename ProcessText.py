@@ -7,7 +7,7 @@ class ProcessText:
 
     def getSimpleText(self):
         self.__result['title'] = self.__cache['top'] + " " + self.__cache['title']
-        self.__result['content'] = str(self.__cache['content'])[0:100]
+        self.__result['content'] = self.__cache['title'] + "\n" + str(self.__cache['content'])[0:50]
         return self.__result
 
     def getNormalText(self):

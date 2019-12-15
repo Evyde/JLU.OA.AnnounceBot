@@ -28,6 +28,8 @@ class MessageSender(object):
             self.__sender = SMTPSender(config)
         elif self.__method == "console":
             self.__sender = ConsoleSender(config)
+        elif self.__method == "bark":
+            self.__sender = BarkSender(config)
         else:
             raise Exception("Configure Exception")
 
@@ -43,14 +45,21 @@ class MessageSender(object):
 
 class ServerChan(object):
     __sckey = ""
+    __url = "https://sc.ftqq.com/"
+    __header = {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+    }
 
     def __init__(self, SCKEY):
         self.__sckey = SCKEY['SCKEY']
 
     def send(self, msg):
-        url = "https://sc.ftqq.com/" + self.__sckey + ".send?text=" + parse.quote(
-            msg['title']) + "&desp=" + parse.quote(msg['content'])
-        return "发送状态：" + str(requests.get(url))
+        url = self.__url + self.__sckey + ".send"
+        postData = {
+            'text': msg['title'],
+            'desp': msg['content']
+        }
+        return "发送状态：" + str(requests.post(url, postData, headers=self.__header))
 
 
 class SMTPSender(object):
@@ -75,9 +84,21 @@ class SMTPSender(object):
 
 class ConsoleSender(object):
     def __init__(self, config):
-        config = config
+        pass
 
     def send(self, msg):
         print("《%s》" % msg['title'])
         print(msg['content'])
         return "控制台输出成功！"
+
+class BarkSender(object):
+    __apiKey = ""
+    __url = "https://api.day.app/"
+
+    def __init__(self, config):
+        self.__apiKey = config['apikey']
+
+    def send(self, msg):
+        url = self.__url + self.__apiKey + "/" + parse.quote(
+            msg['title']) + "/" + parse.quote(msg['content'])
+        return "发送状态：" + str(requests.get(url))

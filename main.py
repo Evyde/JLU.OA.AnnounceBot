@@ -1,7 +1,7 @@
 import GetAnnounce, MessageSender, Logger, ProcessText, time
 
 def main():
-    l = Logger.Logger()
+    l = Logger.Logger("")
     methodFlag = True
     while methodFlag:
         l.info("欢迎使用校内通知接收机器人！")
@@ -47,8 +47,14 @@ def main():
             # x5Pza5ihMyZCkFpW28D6KY
         else:
             l.error("输入错误！请重新输入")
-
-    g = GetAnnounce.GetAnnounce("")
+    l.info("请选择日志输出方式（默认控制台）:")
+    l.info("1. 控制台")
+    l.info("2. 文件announcebot.log")
+    l.notice("请输入：")
+    userInput = int(input())
+    if userInput == 2:
+        l.setMethod("file")
+    g = GetAnnounce.GetAnnounce("", l)
 
     g.createCache()
     cache = g.get()

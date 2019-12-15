@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0c944128-b81d-4c8b-a52e-e9d5ac9693fa" name="Default Changelist" comment="修复了缓存列表刷新时，会重复的问题">
+    <list default="true" id="0c944128-b81d-4c8b-a52e-e9d5ac9693fa" name="Default Changelist" comment="彻底修复缓存更新问题，这次应该不会出错了，但是仅仅是理论上的，实际得用生产环境检验">
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MessageSender.py" beforeDir="false" afterPath="$PROJECT_DIR$/MessageSender.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/GetAnnounce.py" beforeDir="false" afterPath="$PROJECT_DIR$/GetAnnounce.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Logger.py" beforeDir="false" afterPath="$PROJECT_DIR$/Logger.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ProcessText.py" beforeDir="false" afterPath="$PROJECT_DIR$/ProcessText.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -204,7 +207,14 @@
       <option name="project" value="LOCAL" />
       <updated>1576336971165</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="修复了ServerChan Http Error 414的问题，同时加入了Bark的推送方式，iOS系统推送，更稳定，更省流量">
+      <created>1576386449707</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1576386449707</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -229,6 +239,7 @@
     <MESSAGE value="test" />
     <MESSAGE value="修复了缓存更新逻辑，并且修复了获取失败的问题" />
     <MESSAGE value="修复了缓存列表刷新时，会重复的问题" />
-    <option name="LAST_COMMIT_MESSAGE" value="修复了缓存列表刷新时，会重复的问题" />
+    <MESSAGE value="修复了ServerChan Http Error 414的问题，同时加入了Bark的推送方式，iOS系统推送，更稳定，更省流量" />
+    <option name="LAST_COMMIT_MESSAGE" value="修复了ServerChan Http Error 414的问题，同时加入了Bark的推送方式，iOS系统推送，更稳定，更省流量" />
   </component>
 </project>

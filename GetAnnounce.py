@@ -16,12 +16,11 @@ class GetAnnounce(object):
     __obj = None
     __initFlag = False
     __max = 31
-
-    l = Logger.Logger()
+    __logger = None
 
     def __testHttp(self, target):
         try:
-            self.l.info("正在测试网络连通...")
+            self.__logger.info("正在测试网络连通...")
             return requests.get(target)
         except:
             return False
@@ -31,18 +30,19 @@ class GetAnnounce(object):
             cls.__obj = super().__new__(cls)
         return cls.__obj
 
-    def __init__(self, text):
+    def __init__(self, text, logger):
+        self.__logger = logger
         if self.__initFlag is False:
             if text == "" or text == " ":
                 self.__domain = "https://oa.jlu.edu.cn/"
             else:
                 self.__domain = text
             if self.__testHttp(self.__domain):
-                self.l.notice("Http连接成功！")
-                self.l.info("目标地址：" + self.__domain)
+                self.__logger.notice("Http连接成功！")
+                self.__logger.info("目标地址：" + self.__domain)
 
             else:
-                self.l.error("连接错误！请检查网络连接！")
+                self.__logger.error("连接错误！请检查网络连接！")
                 raise Exception("NetworkError")
         self.__initFlag = True
 
@@ -79,9 +79,9 @@ class GetAnnounce(object):
     def createListCache(self):
         self.__cacheList = []
         self.__cacheContent = []
-        self.l.info("正在获取主页内容...")
+        self.__logger.info("正在获取主页内容...")
         html = requests.get(self.__domain + self.__direct + self.__list).text
-        self.l.notice("获取成功！")
+        self.__logger.notice("获取成功！")
         data = etree.HTML(html)
         for i in range(1, self.__max):
             time = data.xpath('//*[@id="itemContainer"]/div[%d]/span/text()' % i)
@@ -91,7 +91,7 @@ class GetAnnounce(object):
             if data.xpath('//*[@id="itemContainer"]/div[%d]/a[1]/font/text()' % i) != []:
                 isTop = "[置顶]"
             else: isTop = ""
-            self.l.info("获取到%s 《%s》通知，发布时间%s" % (isTop, title[0], time[0]))
+            self.__logger.info("获取到%s 《%s》通知，发布时间%s" % (isTop, title[0], time[0]))
             self.__cacheList.append(
                 {"title": title[0], "time": time[0], "href": self.__domain + self.__direct + href[0],
                  "author": author[0], 'top': isTop})
@@ -104,7 +104,7 @@ class GetAnnounce(object):
             tmpResult = ""
             tmpAttach = {}
             tmpLongTitle = ""
-            self.l.info("正在获取%s《%s》..." % (i['top'], i['title']))
+            self.__logger.info("正在获取%s《%s》..." % (i['top'], i['title']))
             '''同时获取完整标题、时间'''
             html = requests.get(i['href'], headers=self.__header).text
             data = etree.HTML(html)
@@ -112,11 +112,11 @@ class GetAnnounce(object):
             for j in content:
                 if str(j.get('class')).find("content_time") != -1:
                     time = j.xpath('./text()')[0]
-                    self.l.info("完整时间：%s" % time)
-                    self.l.info("链接：%s" % i['href'])
+                    self.__logger.info("完整时间：%s" % time)
+                    self.__logger.info("链接：%s" % i['href'])
                 elif str(j.get('class')).find("content_t") != -1:
                     tmpLongTitle = j.xpath('./text()')[0]
-                    self.l.notice("获取成功！完整标题：%s" % tmpLongTitle)
+                    self.__logger.notice("获取成功！完整标题：%s" % tmpLongTitle)
                 if str(j.get('class')).find("content_font") != -1:
                     """目前发现通知网页有两种方法，一种是经过混淆的，另一种是没有混淆的，先尝试有混淆的"""
                     for k in j.xpath('.//p'):
@@ -167,26 +167,53 @@ class GetAnnounce(object):
         # 批量比较不同，将不同的内容放入缓存前方
         # 首先进行整体比较
         if operator.eq(self.__cacheList, oldCache):
-            self.l.notice("缓存未更改！")
+            self.__logger.notice("缓存未更改！")
             return None
         else:
             # 存在新通知
-            # 分别处理置顶与非置顶，因为置顶的时间并不一定是最新的
-            k = 0
-            newCache = []
+            newTopCache = []
+            newEndCache = []
+            oldTopCache = []
+            oldEndCache = []
+            removeTitleList = []
+            addList = []
 
             # 这里不需要进行长度校验，因为两个List都是确定长度。
+            # Cache Content需要分开比较不同以处理置顶这种情况存在
+            # 由于对Python的不了解，本来想把List转换为set，然后用自带的symmetric_difference获得二者的差集，即新/旧缓存
+            # 但是发现该方法报错TypeError: unhashable type: 'dict'，即字典类型不是可hash的类型，这一点由于不能重载dict的__eq__和__hash__方法
+            # 造成不能使用set的方法进行简单而快速的比较，下面采用的算法时间复杂度O(logn)，但是由于设计之初没有考虑清楚，现在已经无法更改变量类型
+            # 只能这样勉强使用，并且，由于学校校园网更新通知太慢，以下代码我只写过接口测试，测试通过，实际环境可能会出错
+            # Cache List 则没有单独更新的必要，因为createListCache方法已经创建过全新的List缓存了
             for i in self.__cacheList:
-                for j in oldCache:
-                    # 比较标题
-                    if i['title'] != j['title']:
-                        newCache.append(i)
-                        self.__cacheList.remove(i)
-                        k += 1
-            for i in range(1, k):
-                self.__cacheContent.pop()
-            self.l.info("共删除%d条。" % k)
-            self.__cacheContent.append(self.getContentCache(newCache))
+                # 新列表
+                if i['top'] == "[置顶]":
+                    newTopCache.append(i)
+                else:
+                    newEndCache.append(i)
+            for i in oldCache:
+                # 旧列表
+                if i['top'] == "[置顶]":
+                    oldTopCache.append(i)
+                else:
+                    oldEndCache.append(i)
+            for i in oldTopCache:
+                if i not in newTopCache:
+                    # 发现新的缓存，此时得到了旧索引
+                    removeTitleList.append(i['title'])
+            for i in oldEndCache:
+                if i not in newEndCache:
+                    # 发现新的缓存，此时得到了旧索引
+                    removeTitleList.append(i['title'])
+            for i in self.__cacheList:
+                if i not in oldCache:
+                    # 发现新缓存，得到新索引
+                    addList.append(i)
+            for i in self.__cacheContent:
+                if i['sTitle'] in removeTitleList:
+                    self.__cacheContent.remove(i)
+            self.__logger.info("共删除%d条。" % len(removeTitleList))
+            self.__cacheContent.append(self.getContentCache(addList))
             self.__cacheContent = self.__cacheSort(self.__cacheContent)
             return self.__cacheContent
 

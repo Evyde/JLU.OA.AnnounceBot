@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0c944128-b81d-4c8b-a52e-e9d5ac9693fa" name="Default Changelist" comment="彻底修复缓存更新问题，这次应该不会出错了，但是仅仅是理论上的，实际得用生产环境检验">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/GetAnnounce.py" beforeDir="false" afterPath="$PROJECT_DIR$/GetAnnounce.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Logger.py" beforeDir="false" afterPath="$PROJECT_DIR$/Logger.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProcessText.py" beforeDir="false" afterPath="$PROJECT_DIR$/ProcessText.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/PythonHomework.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PythonHomework.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

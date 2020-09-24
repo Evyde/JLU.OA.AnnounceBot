@@ -20,13 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0c944128-b81d-4c8b-a52e-e9d5ac9693fa" name="Default Changelist" comment="彻底修复缓存更新问题，这次应该不会出错了，但是仅仅是理论上的，实际得用生产环境检验">
-      <change afterPath="$PROJECT_DIR$/GetAnnounce_Archived.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/PythonHomework.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PythonHomework.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GetAnnounce.py" beforeDir="false" afterPath="$PROJECT_DIR$/GetAnnounce.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,6 +63,7 @@
       </GitPushTagMode>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="MIXED" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="JupyterTrust" id="b860e94a-4462-4f6a-918d-3d6d8e72208d" />
@@ -295,6 +290,10 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="93" y="93" width="2375" height="1215" key="com.intellij.history.integration.ui.views.SelectionHistoryDialog/0.0.2560.1400@0.0.2560.1400" timestamp="1600949486863" />
+    <state x="1064" y="598" key="git4idea.remote.GitConfigureRemotesDialog" timestamp="1600957287394">
+      <screen x="0" y="0" width="2560" height="1400" />
+    </state>
+    <state x="1064" y="598" key="git4idea.remote.GitConfigureRemotesDialog/0.0.2560.1400@0.0.2560.1400" timestamp="1600957287394" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/JLUAnnounceBot$main.coverage" NAME="main Coverage Results" MODIFIED="1600955966984" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

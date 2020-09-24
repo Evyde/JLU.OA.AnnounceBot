@@ -1,9 +1,8 @@
-import datetime
-import functools
-import requests
+from lxml import etree
+import datetime, operator, functools, requests
 from urllib import parse
 
-from lxml import etree
+# 旧方法太麻烦而且有错，直接舍弃采用时间戳的办法
 
 
 class GetAnnounce(object):
@@ -21,40 +20,6 @@ class GetAnnounce(object):
     __initFlag = False
     __max = 31
     __logger = None
-    __config = None
-
-    def __cmpDatetime(self, a, b):
-        aDatetime = datetime.datetime.strptime(a['time'], '%Y年%m月%d日 %H:%M\xa0\xa0')
-        bDatetime = datetime.datetime.strptime(b['time'], '%Y年%m月%d日 %H:%M\xa0\xa0')
-
-        # 比较进行到这里说明a, b都是置顶或非置顶，则按时间进行排序
-        if aDatetime > bDatetime:
-            return -1
-        elif aDatetime < bDatetime:
-            return 1
-        else:
-            return 0
-
-    def __cmpIsTop(self, a, b):
-        isATop = a['top']
-        isBTop = b['top']
-        if isATop == "[置顶]" and isBTop == "":
-            return -1
-        elif isATop == "" and isBTop == "[置顶]":
-            return 1
-        else:
-            return 0
-
-    def __sort(self, sortTarget):
-        # 按时间排序
-        self.__sortByTime(sortTarget)
-        # 按是否置顶排序
-        sortTarget.sort(key=functools.cmp_to_key(self.__cmpIsTop))
-        return sortTarget
-
-    def __sortByTime(self, sortTarget):
-        sortTarget.sort(key=functools.cmp_to_key(self.__cmpDatetime))
-        return sortTarget
 
     def __testHttp(self, target):
         try:
@@ -68,9 +33,8 @@ class GetAnnounce(object):
             cls.__obj = super().__new__(cls)
         return cls.__obj
 
-    def __init__(self, text, logger, cfg):
+    def __init__(self, text, logger):
         self.__logger = logger
-        self.__config = cfg
         if self.__initFlag is False:
             if text == "" or text == " ":
                 self.__domain = "https://oa.jlu.edu.cn/"
@@ -85,7 +49,36 @@ class GetAnnounce(object):
                 raise Exception("NetworkError")
         self.__initFlag = True
 
-    def getList(self):
+    def __cmpDatetime(o, a, b):
+        aDatetime = datetime.datetime.strptime(a['time'], '%Y年%m月%d日 %H:%M\xa0\xa0')
+        bDatetime = datetime.datetime.strptime(b['time'], '%Y年%m月%d日 %H:%M\xa0\xa0')
+
+        # 比较进行到这里说明a, b都是置顶或非置顶，则按时间进行排序
+        if aDatetime > bDatetime:
+            return -1
+        elif aDatetime < bDatetime:
+            return 1
+        else:
+            return 0
+
+    def __cmpIsTop(o, a, b):
+        isATop = a['top']
+        isBTop = b['top']
+        if isATop == "[置顶]" and isBTop == "":
+            return -1
+        elif isATop == "" and isBTop == "[置顶]":
+            return 1
+        else:
+            return 0
+
+    def __cacheSort(self, sortTarget):
+        # 按时间排序
+        sortTarget.sort(key=functools.cmp_to_key(self.__cmpDatetime))
+        # 按是否置顶排序
+        sortTarget.sort(key=functools.cmp_to_key(self.__cmpIsTop))
+        return sortTarget
+
+    def createListCache(self):
         self.__cacheList = []
         self.__cacheContent = []
         self.__logger.info("正在获取主页内容...")
@@ -108,7 +101,7 @@ class GetAnnounce(object):
 
         return self.__cacheList
 
-    def getContents(self, target):
+    def getContentCache(self, target):
         rtnContent = []
         for i in target:
             tmpResult = ""
@@ -122,7 +115,6 @@ class GetAnnounce(object):
             for j in content:
                 if str(j.get('class')).find("content_time") != -1:
                     time = j.xpath('./text()')[0]
-                    timeStamp = int(datetime.datetime.strptime(time, "%Y年%m月%d日 %H:%M\xa0\xa0").timestamp())
                     self.__logger.info("完整时间：%s" % time)
                     self.__logger.info("链接：%s" % i['href'])
                 elif str(j.get('class')).find("content_t") != -1:
@@ -160,20 +152,77 @@ class GetAnnounce(object):
                         link = link.replace('\r', "")
                         link = link.replace('\n', "")
                         tmpAttach.update({str(k.get('title')): link})
-            if timeStamp <= int(self.__config.get("common", "timeStamp")):
-                if not rtnContent:
-                    self.__logger.notice("无更新！")
-                    break
-                rtnContent = self.__sortByTime(rtnContent)
-                print(rtnContent)
-                self.__config.set("common", "timeStamp", str(rtnContent[0]['timeStamp']))
-                rtnContent = self.__sort(rtnContent)
-                break
+
             rtnContent.append(
                 {'title': tmpLongTitle, 'address': i['href'], 'time': time, 'author': i['author'],
-                 'content': tmpResult, 'attach': tmpAttach, 'sTitle': i['title'], 'top': i['top'],
-                 'timeStamp': timeStamp})
+                 'content': tmpResult, 'attach': tmpAttach, 'sTitle': i['title'], 'top': i['top']})
         return rtnContent
 
+    def createContentCache(self):
+        self.__cacheContent = self.getContentCache(self.__cacheList)
+        self.__cacheContent = self.__cacheSort(self.__cacheContent)
+
+    def freshCache(self):
+        # 首先需要复制原有缓存
+        oldCache = self.__cacheList.copy()
+        # 重新创建列表缓存
+        self.createListCache()
+        # 批量比较不同，将不同的内容放入缓存前方
+        # 首先进行整体比较
+        if operator.eq(self.__cacheList, oldCache):
+            self.__logger.notice("缓存未更改！")
+            return None
+        else:
+            # 存在新通知
+            newTopCache = []
+            newEndCache = []
+            oldTopCache = []
+            oldEndCache = []
+            removeTitleList = []
+            addList = []
+
+            # 这里不需要进行长度校验，因为两个List都是确定长度。
+            # Cache Content需要分开比较不同以处理置顶这种情况存在
+            # 由于对Python的不了解，本来想把List转换为set，然后用自带的symmetric_difference获得二者的差集，即新/旧缓存
+            # 但是发现该方法报错TypeError: unhashable type: 'dict'，即字典类型不是可hash的类型，这一点由于不能重载dict的__eq__和__hash__方法
+            # 造成不能使用set的方法进行简单而快速的比较，下面采用的算法时间复杂度O(logn)，但是由于设计之初没有考虑清楚，现在已经无法更改变量类型
+            # 只能这样勉强使用，并且，由于学校校园网更新通知太慢，以下代码我只写过接口测试，测试通过，实际环境可能会出错
+            # Cache List 则没有单独更新的必要，因为createListCache方法已经创建过全新的List缓存了
+            for i in self.__cacheList:
+                # 新列表
+                if i['top'] == "[置顶]":
+                    newTopCache.append(i)
+                else:
+                    newEndCache.append(i)
+            for i in oldCache:
+                # 旧列表
+                if i['top'] == "[置顶]":
+                    oldTopCache.append(i)
+                else:
+                    oldEndCache.append(i)
+            for i in oldTopCache:
+                if i not in newTopCache:
+                    # 发现新的缓存，此时得到了旧索引
+                    removeTitleList.append(i['title'])
+            for i in oldEndCache:
+                if i not in newEndCache:
+                    # 发现新的缓存，此时得到了旧索引
+                    removeTitleList.append(i['title'])
+            for i in self.__cacheList:
+                if i not in oldCache:
+                    # 发现新缓存，得到新索引
+                    addList.append(i)
+            for i in self.__cacheContent:
+                if i['sTitle'] in removeTitleList:
+                    self.__cacheContent.remove(i)
+            self.__logger.info("共删除%d条。" % len(removeTitleList))
+            self.__cacheContent.append(self.getContentCache(addList))
+            self.__cacheContent = self.__cacheSort(self.__cacheContent)
+            return self.__cacheContent
+
     def get(self):
-        return self.getContents(self.getList())
+        return self.__cacheContent
+
+    def createCache(self):
+        self.createListCache()
+        self.createContentCache()
